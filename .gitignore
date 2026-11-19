@@ -1,0 +1,80 @@
+# ==============================================================================
+# ROS 2 Workspace Artifacts
+# ==============================================================================
+build/
+install/
+log/
+
+# ROS 2 / Colcon markers & logs
+COLCON_IGNORE
+AMENT_IGNORE
+*.log
+
+# ROS bags and recording data
+*.bag
+*.db3
+*.mcap
+rosbag2_*
+
+# ==============================================================================
+# PlatformIO & Embedded Firmware (hardware/)
+# ==============================================================================
+.pio/
+*/.pio/
+hardware/.pio/
+
+# Compiled binary & object files
+*.elf
+*.hex
+*.bin
+*.o
+*.a
+*.so
+
+# ==============================================================================
+# Python Artifacts
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+
+# Virtual Environments
+.env/
+.venv/
+venv/
+env/
+
+# ==============================================================================
+# IDEs & Editor Files
+# ==============================================================================
+# VS Code (ignore auto-generated IDE config & cache, preserve extensions.json)
+.vscode/*
+!.vscode/extensions.json
+*/.vscode/*
+!*/.vscode/extensions.json
+
+# Clangd / C++ tooling
+.clangd/
+compile_commands.json
+
+# JetBrains / CLion
+.idea/
+
+# Vim / Emacs temporary files
+*~
+*.swp
+*.swo
+
+# ==============================================================================
+# OS & System Artifacts
+# ==============================================================================
+.DS_Store
+Thumbs.db
+*.bak
+core
+core.*

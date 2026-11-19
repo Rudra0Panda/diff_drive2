@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="inertial.xacro"/>
+    <!-- <xacro:include filename="lidar.xacro"/> -->
+
+    <!-- Properties -->
+
+    <!-- Coordinate convention:
+         +X = FRONT
+         -X = REAR
+         +Y = LEFT
+         -Y = RIGHT
+         +Z = UP
+    -->
+    <!-- <xacro:property name="mesh_file_base"
+                    value="/home/kamal/diff_drive/src/diff_drive_description/description/meshes/base.stl"/>
+
+    <xacro:property name="mesh_file_wheel"
+                    value="/home/kamal/diff_drive/src/diff_drive_description/description/meshes/wheel.stl"/>
+    
+    <xacro:property name ="mesh_file_caster"
+                    value = "/home/kamal/diff_drive/src/diff_drive_description/description/meshes/caster.stl"/> -->
+
+    <xacro:property
+        name="mesh_file_base"
+        value="file://$(arg mesh_path)/description/meshes/base.stl"/>
+
+    <xacro:property
+        name="mesh_file_wheel"
+        value="file://$(arg mesh_path)/description/meshes/wheel.stl"/>
+
+    <xacro:property
+        name="mesh_file_caster"
+        value="file://$(arg mesh_path)/description/meshes/caster.stl"/>
+
+    <xacro:property name="base_length" value="0.498"/>
+    <xacro:property name="base_width" value="0.390"/>
+    <xacro:property name="base_height" value="0.040"/>
+    <xacro:property name="base_mass" value="3.0"/>
+
+    <xacro:property name="wheel_radius" value="0.050"/>
+    <xacro:property name="wheel_width" value="0.045"/>
+    <xacro:property name="wheel_mass" value="0.20"/>
+    <xacro:property name="wheel_x" value="-0.2183"/>
+    <xacro:property name="wheel_y" value="0.029"/>
+    <xacro:property name="wheel_z" value="0.027"/>
+
+    <xacro:property name="caster_radius" value="0.035"/>
+    <xacro:property name="caster_mass" value="0.05"/>
+    <xacro:property name="caster_x" value="0.150"/>
+    <xacro:property name="caster_y" value="0.110"/>
+    <xacro:property name="caster_z" value="0.035"/>
+
+    <!-- Set to 0.001 if STL was exported in millimeters -->
+    <xacro:property name="mesh_scale" value="1 1 1"/>
+
+    <!-- Materials -->
+
+    <material name="base_material">
+        <color rgba="0.149 0.149 0.149 1.0"/>
+    </material>
+
+    <material name="wheel_material">
+        <color rgba="0.0 0.005 0.01 1.0"/>
+    </material>
+
+    <material name="caster_material">
+        <color rgba="0.10 0.10 0.10 1.0"/>
+    </material>
+
+    <!-- Base -->
+
+    <link name="base_link"> 
+    </link>
+
+    <!-- Base footprint -->
+
+    <!-- <link name="base_footprint">
+    </link>
+
+    <joint name="base_footprint_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="base_footprint"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint> -->
+
+
+    <!-- Chassis Link -->
+
+    <joint name="chassis_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
+        <origin xyz="0 0.029 0.027"/>
+    </joint>
+
+    <link name="chassis">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <!-- <mesh filename="package://${mesh_file_base}"/> -->
+                 <!-- gazebo -->
+                <mesh filename="${mesh_file_base}"/>   
+            </geometry>
+            <material name="base_material"/>
+        </visual>
+
+        <collision>
+            <origin xyz="0 -${base_length/2} ${base_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${base_width} ${base_length} ${base_height}"/>
+            </geometry>
+        </collision>
+
+        <xacro:inertial_box
+            mass="${base_mass}"
+            x="${base_width}"
+            y="${base_length}"
+            z="${base_height}">
+            <origin xyz="0 -${base_length/2} ${base_height/2}" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+
+    <!-- Left driving wheel -->
+
+    <joint name="left_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="left_wheel"/>
+        <origin xyz="0.206 0 0" rpy="0 ${-pi/2} 0"/>
+        <axis xyz="0 0 -1"/>
+    </joint>
+
+    <link name="left_wheel">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="${mesh_file_wheel}"/>
+                <!-- <mesh filename="meshes/wheel.stl"/> -->
+            </geometry>
+            <material name="wheel_material"/>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 -0.0275" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+            </geometry>k
+        </collision>
+
+        <xacro:inertial_cylinder
+            mass="${wheel_mass}"
+            length="${wheel_width}"
+            radius="${wheel_radius}">
+            <origin xyz="0 0 -0.0275" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>
+    </link>
+
+
+    <!-- Right driving wheel -->
+
+    <joint name="right_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="right_wheel"/>
+        <origin xyz="-0.206 0 0" rpy="0 ${pi/2} 0"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <link name="right_wheel">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="${mesh_file_wheel}"/>
+                <!-- <mesh filename="meshes/wheel.stl"/> -->
+            </geometry>
+            <material name="wheel_material"/>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 -0.0275" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+            </geometry>
+        </collision>
+
+        <xacro:inertial_cylinder
+            mass="${wheel_mass}"
+            length="${wheel_width}"
+            radius="${wheel_radius}">
+            <origin xyz="0 0 -0.0275" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>
+    </link>
+
+    <!-- Front left caster -->
+
+    <joint name="front_left_caster_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="front_left_caster"/>
+        <origin xyz="0.1775 -0.48419267 -0.065" rpy="0 ${pi/2} 0"/>
+    </joint>
+
+    <link name="front_left_caster">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="${mesh_file_caster}"/>
+                <!-- <mesh filename="meshes/caster.stl"/> -->
+            </geometry>
+            <material name="wheel_material"/>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0.0075" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.012" length="0.015"/>
+            </geometry>
+        </collision>
+
+        <xacro:inertial_sphere
+            mass="${caster_mass}"
+            radius="${caster_radius}">
+            <origin xyz="0 0 0.0075" rpy="0 0 0"/>
+        </xacro:inertial_sphere>
+    </link>
+
+    <!-- Front right caster -->
+
+    <joint name="front_right_caster_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="front_right_caster"/>
+        <origin xyz="-0.1925 -0.48419267 -0.065" rpy="0 ${pi/2} 0"/>
+    </joint>
+
+    <link name="front_right_caster">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="${mesh_file_caster}"/>
+                <!-- <mesh filename="meshes/caster.stl"/> -->
+            </geometry>
+            <material name="wheel_material"/>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0.0075" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.012" length="0.015"/>
+            </geometry>
+        </collision>
+
+        <xacro:inertial_sphere
+            mass="${caster_mass}"
+            radius="${caster_radius}">
+            <origin xyz="0 0 0.0075" rpy="0 0 0"/>
+        </xacro:inertial_sphere>
+    </link>
+
+</robot>

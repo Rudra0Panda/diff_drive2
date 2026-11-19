@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="diff_drive">
+
+    <xacro:arg name="mesh_path" default="/tmp"/>
+    <xacro:property name="mesh_path" value="$(arg mesh_path)"/>
+
+    <xacro:include filename="inertial.xacro"/>
+
+    <!-- ros2 control -->
+    <xacro:include filename="ros2_control.xacro"/>
+
+    <!-- whole robot -->
+    <xacro:include filename="base.xacro"/>
+    <xacro:include filename="lidar.xacro"/>
+
+    <!-- gazebo plugin -->
+    <xacro:include filename="gazebo.xacro"/> 
+
+
+
+</robot>
